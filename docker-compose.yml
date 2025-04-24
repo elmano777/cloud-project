@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  api-nest:
+    build: ./api-nest
+    ports:
+      - "3000:3000"
+    networks:
+      - micro-net
+
+  api-fast:
+    build: ./api-fast
+    ports:
+      - "8000:8000"
+    networks:
+      - micro-net
+
+  api-fiber:
+    build: ./api-fiber
+    ports:
+      - "3001:3000"
+    networks:
+      - micro-net
+
+networks:
+  micro-net:
+    driver: bridge
