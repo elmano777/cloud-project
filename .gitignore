@@ -1,2 +1,20 @@
 # Ignorar entorno virtual
 .venv/
+
+__pycache__/
+*.py[cod]
+
+Pipfile.lock
+poetry.lock
+
+.vscode/
+.idea/
+*.iml
+
+.pytest_cache/
+.coverage
+
+*.sqlite3
+.env
+
+.ropeproject
