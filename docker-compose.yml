@@ -2,26 +2,51 @@ version: '3.8'
 
 services:
   api-nest:
-    build: ./api-nest
+    build: ./backend/api-nest
     ports:
       - "3000:3000"
     networks:
       - micro-net
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   api-fast:
-    build: ./api-fast
+    build: ./backend/api-fast
     ports:
       - "8000:8000"
     networks:
       - micro-net
+    environment:
+      - PYTHON_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   api-fiber:
-    build: ./api-fiber
+    build: ./backend/api-fiber
     ports:
       - "3001:3000"
     networks:
       - micro-net
+    environment:
+      - GO_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 networks:
   micro-net:
     driver: bridge
+    name: microservices-network
