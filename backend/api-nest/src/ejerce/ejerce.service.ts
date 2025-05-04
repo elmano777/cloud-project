@@ -8,7 +8,15 @@ import { UpdateEjerceDto } from './dto/update-ejerce.dto';
 @Injectable()
 export class EjerceService {
   async create(createEjerceDto: CreateEjerceDto) {
-    const [nuevo] = await db.insert(ejerceTable).values(createEjerceDto).returning();
+    const [nuevo] = await db
+      .insert(ejerceTable)
+      .values({
+        ...createEjerceDto,
+        fecha_asignacion: createEjerceDto.fecha_asignacion
+          ? new Date(createEjerceDto.fecha_asignacion)
+          : new Date(),
+      })
+      .returning();
     return nuevo;
   }
 
@@ -17,7 +25,10 @@ export class EjerceService {
   }
 
   async findOne(id: number) {
-    const ejerce = await db.select().from(ejerceTable).where(eq(ejerceTable.id, id));
+    const ejerce = await db
+      .select()
+      .from(ejerceTable)
+      .where(eq(ejerceTable.id, id));
     if (ejerce.length === 0) {
       throw new NotFoundException(`Registro ejerce con ID ${id} no encontrado`);
     }
@@ -28,8 +39,14 @@ export class EjerceService {
     // Verificar si existe
     await this.findOne(id);
 
-    const actualizado = await db.update(ejerceTable)
-      .set(updateEjerceDto)
+    const actualizado = await db
+      .update(ejerceTable)
+      .set({
+        ...updateEjerceDto,
+        fecha_asignacion: updateEjerceDto.fecha_asignacion
+          ? new Date(updateEjerceDto.fecha_asignacion)
+          : undefined,
+      })
       .where(eq(ejerceTable.id, id))
       .returning();
 
@@ -43,13 +60,14 @@ export class EjerceService {
     // Verificar si existe
     await this.findOne(id);
 
-    const eliminado = await db.delete(ejerceTable)
+    const eliminado = await db
+      .delete(ejerceTable)
       .where(eq(ejerceTable.id, id))
       .returning();
 
-    if (eliminado.length === 0) {
-      throw new NotFoundException(`Registro ejerce con ID ${id} no encontrado`);
-    }
-    return eliminado[0];
+    return {
+      message: 'Registro ejerce eliminado correctamente',
+      ejerceEliminado: eliminado[0].id,
+    };
   }
 }

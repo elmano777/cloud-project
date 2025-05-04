@@ -11,13 +11,16 @@ export class UsuariosService {
   async create(createUsuarioDto: CreateUsuarioDto) {
     // Encriptar la contraseña
     const hashedPassword = await bcrypt.hash(createUsuarioDto.password, 10);
-    
+
     // Crear el usuario con la contraseña encriptada
-    const nuevoUsuario = await db.insert(usuariosTable).values({
-      ...createUsuarioDto,
-      password: hashedPassword,
-    }).returning();
-    
+    const nuevoUsuario = await db
+      .insert(usuariosTable)
+      .values({
+        ...createUsuarioDto,
+        password: hashedPassword,
+      })
+      .returning();
+
     return nuevoUsuario[0];
   }
 
@@ -26,45 +29,56 @@ export class UsuariosService {
   }
 
   async findOne(id: number) {
-    const usuario = await db.select().from(usuariosTable).where(eq(usuariosTable.id, id));
-    
+    const usuario = await db
+      .select()
+      .from(usuariosTable)
+      .where(eq(usuariosTable.id, id));
+
     if (usuario.length === 0) {
       throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
     }
-    
+
     return usuario[0];
   }
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
     // Verificar si el usuario existe
     await this.findOne(id);
-    
+
     // Si se actualiza la contraseña, encriptarla
     if (updateUsuarioDto.password) {
-      updateUsuarioDto.password = await bcrypt.hash(updateUsuarioDto.password, 10);
+      updateUsuarioDto.password = await bcrypt.hash(
+        updateUsuarioDto.password,
+        10,
+      );
     }
-    
+
     // Actualizar el usuario
-    const usuarioActualizado = await db.update(usuariosTable)
+    const usuarioActualizado = await db
+      .update(usuariosTable)
       .set({
         ...updateUsuarioDto,
         fechaActualizacion: new Date(),
       })
       .where(eq(usuariosTable.id, id))
       .returning();
-    
+
     return usuarioActualizado[0];
   }
 
   async remove(id: number) {
     // Verificar si el usuario existe
     await this.findOne(id);
-    
+
     // Eliminar el usuario
-    const usuarioEliminado = await db.delete(usuariosTable)
+    const usuarioEliminado = await db
+      .delete(usuariosTable)
       .where(eq(usuariosTable.id, id))
       .returning();
-    
-    return usuarioEliminado[0];
+
+    return {
+      message: 'Usuario eliminado correctamente',
+      usuarioEliminado: usuarioEliminado[0].email,
+    };
   }
 }

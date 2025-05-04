@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsDateString } from 'class-validator';
 
 export class CreateEjerceDto {
   @IsInt()
@@ -10,6 +10,6 @@ export class CreateEjerceDto {
   curso_id: number;
 
   @IsOptional()
-  @IsInt()
-  fecha_asignacion?: Date;
+  @IsDateString()
+  fecha_asignacion?: string;
 }

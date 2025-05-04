@@ -1,4 +1,10 @@
-import { pgTable, serial, varchar, boolean, timestamp } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  serial,
+  varchar,
+  boolean,
+  timestamp,
+} from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { ejerceTable } from './ejerce';
 

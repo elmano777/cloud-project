@@ -1,3 +1,12 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 
-export const db = drizzle(process.env.DATABASE_URL!);
+const pool = new Pool({
+  host: 'localhost',
+  port: 5432,
+  user: 'postgres',
+  password: 'postgres',
+  database: 'usuario',
+});
+
+export const db = drizzle(pool);

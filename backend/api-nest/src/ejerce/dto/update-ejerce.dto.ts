@@ -11,5 +11,5 @@ export class UpdateEjerceDto {
 
   @IsOptional()
   @IsDateString()
-  fecha_asignacion?: Date;
+  fecha_asignacion?: string;
 }
