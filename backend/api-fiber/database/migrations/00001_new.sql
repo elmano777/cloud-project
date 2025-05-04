@@ -9,7 +9,7 @@ CREATE TABLE cursos (
 
 CREATE TABLE estudiante_cursos (
     estudiante_id INT NOT NULL,
-    curso_codigo VARCHAR(20) NOT NULL,
+    curso_codigo INT NOT NULL,
     inscrito_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (estudiante_id, curso_codigo),
     FOREIGN KEY (curso_codigo) REFERENCES cursos (codigo) ON DELETE CASCADE
