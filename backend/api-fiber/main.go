@@ -1,13 +1,14 @@
 package main
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"log"
+
+	bootstrap "api-fiber/app/boostrap"
+)
 
 func main() {
-	app := fiber.New()
+	app := bootstrap.InitializeApp()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
-
-	app.Listen(":3000")
+	log.Println("🚀 Servidor iniciado en http://localhost:8070")
+	app.Listen(":8070")
 }
