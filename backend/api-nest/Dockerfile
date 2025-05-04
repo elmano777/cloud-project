@@ -1,21 +1,28 @@
-# Usa una imagen de Node.js
-FROM node:20
+# Base image
+FROM node:20-alpine
 
-# Establece el directorio de trabajo
-WORKDIR /app
+# Create app directory
+WORKDIR /usr/src/app
 
-# Copia los archivos
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
+
+# Install app dependencies
 RUN npm install
 
-# Copia el resto del proyecto
+# Bundle app source
 COPY . .
 
-# Compila el proyecto
+# Copy the .env and .env.development files
+COPY .env ./
+
+ENV DATABASE_URL=postgres://postgres:postgres@postgres-db:5432/usuario
+
+# Creates a "dist" folder with the production build
 RUN npm run build
 
-# Expone el puerto
+# Expose the port on which the app will run
 EXPOSE 3000
 
-# Comando para iniciar el servidor
-CMD ["npm", "run", "start:prod"]
+# Start the server using the production build
+CMD ["npm", "run", "start"]
