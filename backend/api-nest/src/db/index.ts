@@ -1,12 +1,10 @@
+import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
 
-const pool = new Pool({
-  host: 'localhost',
-  port: 5432,
-  user: 'postgres',
-  password: 'postgres',
-  database: 'usuario',
+// You can specify any property from the node-postgres connection options
+export const db = drizzle({
+  connection: {
+    connectionString: process.env.DATABASE_URL!,
+    ssl: false,
+  },
 });
-
-export const db = drizzle(pool);
