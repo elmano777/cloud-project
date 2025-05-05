@@ -24,7 +24,7 @@ async def obtener_calificacion(id_nota: int):
 async def eliminar_calificacion(id_nota: int):
     if not await crud_calificaciones.eliminar_calificacion(id_nota):
         raise HTTPException(status_code=404, detail="No encontrada")
-    return {"mensaje": "Eliminada correctamente"}
+    return {"msg": "Calificación y nota eliminadas"}
 
 # --- Endpoints Nota ---
 @app.post("/nota/")
