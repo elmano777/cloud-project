@@ -1,5 +1,5 @@
 # Base image
-FROM node:20-alpine
+FROM node:20-slim
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -16,8 +16,6 @@ COPY . .
 # Copy the .env and .env.development files
 COPY .env ./
 
-ENV DATABASE_URL=postgres://postgres:postgres@postgres-db:5432/usuario
-
 # Creates a "dist" folder with the production build
 RUN npm run build
 
@@ -25,4 +23,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Start the server using the production build
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npx drizzle-kit push && npm run start"]
