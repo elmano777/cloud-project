@@ -41,3 +41,10 @@ async def obtener_nota(id_nota: int):
 async def eliminar_nota(id_nota: int):
     result = await coleccion.delete_one({"id_nota": id_nota})
     return result.deleted_count == 1
+
+async def obtener_notas_filtradas(id_estudiante: int, codigo_curso: int):
+    # Filtrar las notas según estudiante y curso
+    notas = []
+    async for doc in coleccion.find({"id_estudiante": id_estudiante, "codigo_curso": codigo_curso}):
+        notas.append(convert_objectid(doc))
+    return notas

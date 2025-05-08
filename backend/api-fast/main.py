@@ -47,3 +47,13 @@ async def eliminar_nota(id_nota: int):
     if not await crud_nota.eliminar_nota(id_nota):
         raise HTTPException(status_code=404, detail="No encontrada")
     return {"mensaje": "Eliminada correctamente"}
+
+@app.get("/notas")
+async def obtener_notas_filtradas(id_estudiante: int, codigo_curso: int):
+    if id_estudiante is None or codigo_curso is None:
+        raise HTTPException(status_code=400, detail="Faltan parámetros: id_estudiante y codigo_curso son requeridos")
+
+    notas = await crud_nota.obtener_notas_filtradas(id_estudiante, codigo_curso)
+    if not notas:
+        raise HTTPException(status_code=404, detail="No se encontraron notas para este estudiante en el curso especificado")
+    return notas

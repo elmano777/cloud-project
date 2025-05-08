@@ -11,6 +11,8 @@ class Nota(BaseModel):
     id_nota: int
     valor: int
     fecha: date
+    id_estudiante: int
+    codigo_curso: int
 
     class Config:
         json_encoders = {

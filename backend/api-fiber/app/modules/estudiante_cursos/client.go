@@ -12,7 +12,7 @@ type UserClient struct {
 // NewUserClient - Crea una nueva instancia del cliente de usuario
 func NewUserClient() *UserClient {
 	return &UserClient{
-		BaseURL: "http://localhost:3000", // URL del microservicio de usuarios en NestJS
+		BaseURL: "http://api-nest:3000", // URL del microservicio de usuarios en NestJS
 	}
 }
 

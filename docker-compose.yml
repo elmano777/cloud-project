@@ -1,7 +1,4 @@
-version: "3.8"
-
 services:
-  # PostgreSQL para el microservicio NestJS
   postgres-db:
     image: postgres:15
     container_name: postgres-db
@@ -13,8 +10,12 @@ services:
       - "5432:5432"
     networks:
       - mi_red
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  # MySQL para el microservicio Go
   mysql_goose:
     image: mysql:latest
     container_name: mysql_goose
@@ -25,8 +26,22 @@ services:
       - "3306:3306"
     networks:
       - mi_red
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-pmi_password",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  # MongoDB para el microservicio FastAPI
   mongo-dev:
     image: mongo
     container_name: mongo-dev
@@ -35,13 +50,13 @@ services:
     networks:
       - mi_red
 
-  # Microservicio NestJS (puerto 3000)
   api-nest:
     build:
       context: ./backend/api-nest
     container_name: mi-nestjs-container
     depends_on:
-      - postgres-db
+      postgres-db:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres-db:5432/usuario
     ports:
@@ -49,13 +64,13 @@ services:
     networks:
       - mi_red
 
-  # Microservicio Go (puerto 8070)
   api-go:
     build:
       context: ./backend/api-fiber
     container_name: mi-go-container
     depends_on:
-      - mysql_goose
+      mysql_goose:
+        condition: service_healthy
     environment:
       DB_HOST: mysql_goose
       DB_PORT: 3306
@@ -71,17 +86,34 @@ services:
     networks:
       - mi_red
 
-  # Microservicio FastAPI (puerto 80 interno, expuesto como 8080)
   api-fastapi:
     build:
       context: ./backend/api-fast
     container_name: mi-fastapi-container
     depends_on:
-      - mongo-dev
+      mongo-dev:
+        condition: service_healthy
     environment:
       MONGO_URL: mongodb://mongo-dev:27017
     ports:
       - "8080:80"
+    networks:
+      - mi_red
+
+  orquestador:
+    build:
+      context: ./backend/api-orquestador
+    container_name: orquestador
+    environment:
+      USUARIOS_SERVICE_URL: http://api-nest:3000
+      CURSOS_SERVICE_URL: http://api-go:8070
+      NOTAS_SERVICE_URL: http://api-fastapi:80
+    ports:
+      - "9000:9000"
+    depends_on:
+      - api-nest
+      - api-go
+      - api-fastapi
     networks:
       - mi_red
 

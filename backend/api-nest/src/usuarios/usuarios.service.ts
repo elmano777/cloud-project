@@ -66,6 +66,30 @@ export class UsuariosService {
     return usuarioActualizado[0];
   }
 
+  async login(email: string, password: string) {
+    // Buscar usuario por email
+    const usuarios = await db
+      .select()
+      .from(usuariosTable)
+      .where(eq(usuariosTable.email, email));
+
+    const usuario = usuarios[0];
+
+    if (!usuario) {
+      throw new NotFoundException('Credenciales incorrectas');
+    }
+
+    // Comparar contraseñas
+    const passwordMatch = await bcrypt.compare(password, usuario.password);
+    if (!passwordMatch) {
+      throw new NotFoundException('Credenciales incorrectas');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...usuarioSinPassword } = usuario;
+    return usuarioSinPassword;
+  }
+
   async remove(id: number) {
     // Verificar si el usuario existe
     await this.findOne(id);
