@@ -67,22 +67,32 @@ export class UsuariosService {
   }
 
   async login(email: string, password: string) {
+    console.log(`Intentando login con email: ${email}`);
+
     // Buscar usuario por email
     const usuarios = await db
       .select()
       .from(usuariosTable)
       .where(eq(usuariosTable.email, email));
 
-    const usuario = usuarios[0];
+    console.log('Usuarios encontrados:', usuarios.length);
 
+    const usuario = usuarios[0];
     if (!usuario) {
+      console.log('No se encontró el usuario');
       throw new NotFoundException('Credenciales incorrectas');
     }
 
+    console.log('Usuario encontrado:', usuario.email);
+    console.log('Contraseña proporcionada:', password);
+    console.log('Contraseña almacenada (hash):', usuario.password);
+
     // Comparar contraseñas
     const passwordMatch = await bcrypt.compare(password, usuario.password);
-    console.log('Contraseña comparada:', passwordMatch); // Verifica el resultado de la comparación
+    console.log('¿Contraseña coincide?:', passwordMatch);
+
     if (!passwordMatch) {
+      console.log('La contraseña no coincide');
       throw new NotFoundException('Credenciales incorrectas');
     }
 
@@ -90,7 +100,6 @@ export class UsuariosService {
     const { password: _, ...usuarioSinPassword } = usuario;
     return usuarioSinPassword;
   }
-
   async remove(id: number) {
     // Verificar si el usuario existe
     await this.findOne(id);

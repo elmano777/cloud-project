@@ -47,6 +47,7 @@ export class UsuariosController {
 
   @Post('login')
   login(@Body() loginDto: LoginDto) {
+    console.log('Datos recibidos en el login:', loginDto);
     return this.usuariosService.login(loginDto.email, loginDto.password);
   }
 }
