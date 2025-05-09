@@ -14,5 +14,3 @@ COPY .env .env
 # Esperar a que las bases de datos estén listas antes de ejecutar el script
 COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh
-
-CMD ["bash", "-c", "wait-for-it.sh postgres-db:5432 -- wait-for-it.sh mysql-db:3306 -- wait-for-it.sh mongo-db:27017 -- python seed.py"]
