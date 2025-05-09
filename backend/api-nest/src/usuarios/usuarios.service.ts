@@ -81,6 +81,7 @@ export class UsuariosService {
 
     // Comparar contraseñas
     const passwordMatch = await bcrypt.compare(password, usuario.password);
+    console.log('Contraseña comparada:', passwordMatch); // Verifica el resultado de la comparación
     if (!passwordMatch) {
       throw new NotFoundException('Credenciales incorrectas');
     }

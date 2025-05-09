@@ -1,64 +1,10 @@
 services:
-  postgres-db:
-    image: postgres:15
-    container_name: postgres-db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: usuario
-    ports:
-      - "5432:5432"
-    networks:
-      - mi_red
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  mysql_goose:
-    image: mysql:latest
-    container_name: mysql_goose
-    environment:
-      MYSQL_ROOT_PASSWORD: mi_password
-      MYSQL_DATABASE: cursos
-    ports:
-      - "3306:3306"
-    networks:
-      - mi_red
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-pmi_password",
-        ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  mongo-dev:
-    image: mongo
-    container_name: mongo-dev
-    ports:
-      - "27017:27017"
-    networks:
-      - mi_red
-
   api-nest:
     build:
       context: ./backend/api-nest
     container_name: mi-nestjs-container
-    depends_on:
-      postgres-db:
-        condition: service_healthy
     environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres-db:5432/usuario
+      DATABASE_URL: postgres://postgres:postgres@<IP_PUBLICA_POSTGRES>:5432/usuario
     ports:
       - "3000:3000"
     networks:
@@ -68,17 +14,14 @@ services:
     build:
       context: ./backend/api-fiber
     container_name: mi-go-container
-    depends_on:
-      mysql_goose:
-        condition: service_healthy
     environment:
-      DB_HOST: mysql_goose
+      DB_HOST: <IP_PUBLICA_MYSQL>
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: mi_password
       DB_NAME: cursos
       GOOSE_DRIVER: mysql
-      GOOSE_DBSTRING: root:mi_password@tcp(mysql_goose:3306)/cursos?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci
+      GOOSE_DBSTRING: root:mi_password@tcp(<IP_PUBLICA_MYSQL>:3306)/cursos?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci
       GOOSE_MIGRATION_DIR: ./database/migrations
       GOOSE_TABLE: custom.goose_migrations
     ports:
@@ -90,11 +33,8 @@ services:
     build:
       context: ./backend/api-fast
     container_name: mi-fastapi-container
-    depends_on:
-      mongo-dev:
-        condition: service_healthy
     environment:
-      MONGO_URL: mongodb://mongo-dev:27017
+      MONGO_URL: mongodb://<IP_PUBLICA_MONGO>:27017
     ports:
       - "8080:80"
     networks:
