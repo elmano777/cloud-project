@@ -4,7 +4,7 @@ services:
       context: ./backend/api-nest
     container_name: mi-nestjs-container
     environment:
-      DATABASE_URL: postgres://postgres:postgres@<IP_PUBLICA_POSTGRES>:5432/usuario
+      DATABASE_URL: postgres://postgres:postgres@54.234.149.220:5432/usuario
     ports:
       - "3000:3000"
     networks:
@@ -15,13 +15,13 @@ services:
       context: ./backend/api-fiber
     container_name: mi-go-container
     environment:
-      DB_HOST: <IP_PUBLICA_MYSQL>
+      DB_HOST: 54.234.149.220
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: mi_password
       DB_NAME: cursos
       GOOSE_DRIVER: mysql
-      GOOSE_DBSTRING: root:mi_password@tcp(<IP_PUBLICA_MYSQL>:3306)/cursos?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci
+      GOOSE_DBSTRING: root:mi_password@tcp(54.234.149.220:3306)/cursos?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci
       GOOSE_MIGRATION_DIR: ./database/migrations
       GOOSE_TABLE: custom.goose_migrations
     ports:
@@ -34,7 +34,7 @@ services:
       context: ./backend/api-fast
     container_name: mi-fastapi-container
     environment:
-      MONGO_URL: mongodb://<IP_PUBLICA_MONGO>:27017
+      MONGO_URL: mongodb://54.234.149.220:27017
     ports:
       - "8080:80"
     networks:
