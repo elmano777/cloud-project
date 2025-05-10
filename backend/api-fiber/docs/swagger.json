@@ -1,0 +1,571 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API para la gestión de cursos y matrículas de estudiantes",
+        "title": "API de Gestión de Cursos y Estudiantes",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Soporte API",
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8070",
+    "basePath": "/",
+    "paths": {
+        "/cursos": {
+            "get": {
+                "description": "Obtiene una lista paginada de todos los cursos disponibles",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cursos"
+                ],
+                "summary": "Listar todos los cursos",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/cursos.CursoResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Crea un nuevo curso en el sistema",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cursos"
+                ],
+                "summary": "Crear un nuevo curso",
+                "parameters": [
+                    {
+                        "description": "Datos del curso",
+                        "name": "curso",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/cursos.CreateCursoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/cursos.CursoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    }
+                }
+            }
+        },
+        "/cursos/test": {
+            "get": {
+                "description": "Verifica si el controlador de cursos está funcionando correctamente",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "cursos"
+                ],
+                "summary": "Endpoint de prueba para cursos",
+                "responses": {
+                    "200": {
+                        "description": "CursoController funcionando correctamente",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/cursos/{codigo}": {
+            "get": {
+                "description": "Obtiene la información de un curso específico según su código",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cursos"
+                ],
+                "summary": "Obtener un curso por su código",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Código del curso",
+                        "name": "codigo",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/cursos.CursoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Actualiza la información de un curso según su código",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cursos"
+                ],
+                "summary": "Actualizar un curso existente",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Código del curso",
+                        "name": "codigo",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Datos actualizados del curso",
+                        "name": "curso",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/cursos.UpdateCursoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Elimina un curso según su código",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cursos"
+                ],
+                "summary": "Eliminar un curso",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Código del curso",
+                        "name": "codigo",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    }
+                }
+            }
+        },
+        "/estudiante-cursos": {
+            "post": {
+                "description": "Inscribe a un estudiante en un curso específico",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "estudiante-cursos"
+                ],
+                "summary": "Inscribir estudiante en curso",
+                "parameters": [
+                    {
+                        "description": "Datos de inscripción",
+                        "name": "inscripcion",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/estudiantecurso.InscripcionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Elimina la inscripción de un estudiante en un curso específico",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "estudiante-cursos"
+                ],
+                "summary": "Desinscribir estudiante de curso",
+                "parameters": [
+                    {
+                        "description": "Datos de desinscripción",
+                        "name": "desinscripcion",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/estudiantecurso.DesinscripcionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    }
+                }
+            }
+        },
+        "/estudiante-cursos/curso/{codigo}": {
+            "get": {
+                "description": "Obtiene todos los estudiantes inscritos en un curso específico",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "estudiante-cursos"
+                ],
+                "summary": "Obtener estudiantes de un curso",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Código del curso",
+                        "name": "codigo",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/estudiantecurso.EstudianteCurso"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    }
+                }
+            }
+        },
+        "/estudiante-cursos/estudiante/{id}": {
+            "get": {
+                "description": "Obtiene todos los cursos en los que está inscrito un estudiante específico",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "estudiante-cursos"
+                ],
+                "summary": "Obtener cursos de un estudiante",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID del estudiante",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/estudiantecurso.EstudianteCurso"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/fiber.Map"
+                        }
+                    }
+                }
+            }
+        },
+        "/estudiante-cursos/test": {
+            "get": {
+                "description": "Verifica si el controlador de estudiante-cursos está funcionando correctamente",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "estudiante-cursos"
+                ],
+                "summary": "Endpoint de prueba para estudiante-cursos",
+                "responses": {
+                    "200": {
+                        "description": "Endpoint de prueba para estudiante-cursos",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "cursos.CreateCursoRequest": {
+            "type": "object",
+            "required": [
+                "ciclo",
+                "codigo",
+                "horario",
+                "nombre"
+            ],
+            "properties": {
+                "ciclo": {
+                    "description": "Ejemplo: \"2023-1\", \"2023-2\"",
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 5
+                },
+                "codigo": {
+                    "type": "integer",
+                    "maximum": 20,
+                    "minimum": 5
+                },
+                "horario": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
+                },
+                "nombre": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "cursos.CursoResponse": {
+            "type": "object",
+            "properties": {
+                "ciclo": {
+                    "type": "string"
+                },
+                "codigo": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "estudiantes_count": {
+                    "type": "integer"
+                },
+                "horario": {
+                    "type": "string"
+                },
+                "nombre": {
+                    "type": "string"
+                }
+            }
+        },
+        "cursos.UpdateCursoRequest": {
+            "type": "object",
+            "properties": {
+                "ciclo": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 5
+                },
+                "codigo": {
+                    "type": "integer",
+                    "maximum": 20,
+                    "minimum": 5
+                },
+                "horario": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
+                },
+                "nombre": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3
+                }
+            }
+        },
+        "estudiantecurso.DesinscripcionRequest": {
+            "type": "object",
+            "required": [
+                "curso_codigo",
+                "estudiante_id"
+            ],
+            "properties": {
+                "curso_codigo": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 5
+                },
+                "estudiante_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "estudiantecurso.EstudianteCurso": {
+            "type": "object",
+            "properties": {
+                "cursoCodigo": {
+                    "type": "string"
+                },
+                "estudianteID": {
+                    "type": "integer"
+                },
+                "inscritoEn": {
+                    "type": "string"
+                }
+            }
+        },
+        "estudiantecurso.InscripcionRequest": {
+            "type": "object",
+            "required": [
+                "curso_codigo",
+                "estudiante_id"
+            ],
+            "properties": {
+                "curso_codigo": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 5
+                },
+                "estudiante_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "fiber.Map": {
+            "type": "object",
+            "additionalProperties": true
+        }
+    }
+}

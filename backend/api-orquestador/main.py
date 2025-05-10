@@ -10,7 +10,14 @@ NOTAS_SERVICE_URL = os.getenv("NOTAS_SERVICE_URL", "http://mi-fastapi-container:
 
 @app.get("/estudiante/{id_estudiante}/cursos")
 async def obtener_estudiante_cursos(id_estudiante: int):
-    # Obtener los cursos inscritos del estudiante
+    estudiante_url = f"{USUARIOS_SERVICE_URL}/usuarios/{id_estudiante}"
+    async with httpx.AsyncClient() as client:
+        estudiante_response = await client.get(estudiante_url)
+        if estudiante_response.status_code != 200:
+            raise HTTPException(status_code=500, detail="Error al obtener información del estudiante")
+
+        estudiante = estudiante_response.json()
+
     cursos_url = f"{CURSOS_SERVICE_URL}/estudiante-cursos/estudiante/{id_estudiante}"
     async with httpx.AsyncClient() as client:
         cursos_response = await client.get(cursos_url)
@@ -19,7 +26,6 @@ async def obtener_estudiante_cursos(id_estudiante: int):
 
         cursos_inscritos = cursos_response.json()
 
-        # Obtener detalles de cada curso
         detalles_cursos = []
         for curso in cursos_inscritos:
             codigo_curso = curso["CursoCodigo"]
@@ -33,7 +39,10 @@ async def obtener_estudiante_cursos(id_estudiante: int):
                     "error": "Información del curso no disponible"
                 })
 
-    return detalles_cursos
+    return {
+        "estudiante": estudiante,
+        "cursos": detalles_cursos
+    }
 
 @app.get("/estudiante/{id_estudiante}/curso/{codigo_curso}/notas")
 async def obtener_notas_curso_estudiante(id_estudiante: int, codigo_curso: int):

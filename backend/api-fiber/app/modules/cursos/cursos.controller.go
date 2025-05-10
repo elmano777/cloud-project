@@ -14,12 +14,28 @@ func NewCursoController(cursoService *CursoService) *CursoController {
 	return &CursoController{cursoService: cursoService}
 }
 
-// Endpoint de prueba
+// Testing godoc
+// @Summary Endpoint de prueba para cursos
+// @Description Verifica si el controlador de cursos está funcionando correctamente
+// @Tags cursos
+// @Produce plain
+// @Success 200 {string} string "CursoController funcionando correctamente"
+// @Router /cursos/test [get]
 func (c *CursoController) Testing(ctx *fiber.Ctx) error {
 	return ctx.SendString("CursoController funcionando correctamente")
 }
 
-// Crear un nuevo curso
+// CreateCurso godoc
+// @Summary Crear un nuevo curso
+// @Description Crea un nuevo curso en el sistema
+// @Tags cursos
+// @Accept json
+// @Produce json
+// @Param curso body CreateCursoRequest true "Datos del curso"
+// @Success 201 {object} CursoResponse
+// @Failure 400 {object} fiber.Map
+// @Failure 500 {object} fiber.Map
+// @Router /cursos [post]
 func (c *CursoController) CreateCurso(ctx *fiber.Ctx) error {
 	var req CreateCursoRequest
 	if err := ctx.BodyParser(&req); err != nil {
@@ -34,7 +50,16 @@ func (c *CursoController) CreateCurso(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusCreated).JSON(curso)
 }
 
-// Obtener un curso por su código
+// GetCursoByCodigo godoc
+// @Summary Obtener un curso por su código
+// @Description Obtiene la información de un curso específico según su código
+// @Tags cursos
+// @Produce json
+// @Param codigo path string true "Código del curso"
+// @Success 200 {object} CursoResponse
+// @Failure 400 {object} fiber.Map
+// @Failure 404 {object} fiber.Map
+// @Router /cursos/{codigo} [get]
 func (c *CursoController) GetCursoByCodigo(ctx *fiber.Ctx) error {
 	codigoStr := ctx.Params("codigo")
 
@@ -52,7 +77,14 @@ func (c *CursoController) GetCursoByCodigo(ctx *fiber.Ctx) error {
 	return ctx.JSON(curso)
 }
 
-// Listar cursos paginados
+// ListCursos godoc
+// @Summary Listar todos los cursos
+// @Description Obtiene una lista paginada de todos los cursos disponibles
+// @Tags cursos
+// @Produce json
+// @Success 200 {array} CursoResponse
+// @Failure 500 {object} fiber.Map
+// @Router /cursos [get]
 func (c *CursoController) ListCursos(ctx *fiber.Ctx) error {
 	result, err := c.cursoService.ListCursos(ctx.Context())
 	if err != nil {
@@ -62,7 +94,18 @@ func (c *CursoController) ListCursos(ctx *fiber.Ctx) error {
 	return ctx.JSON(result)
 }
 
-// Actualizar un curso existente
+// UpdateCurso godoc
+// @Summary Actualizar un curso existente
+// @Description Actualiza la información de un curso según su código
+// @Tags cursos
+// @Accept json
+// @Produce json
+// @Param codigo path string true "Código del curso"
+// @Param curso body UpdateCursoRequest true "Datos actualizados del curso"
+// @Success 200 {object} fiber.Map
+// @Failure 400 {object} fiber.Map
+// @Failure 500 {object} fiber.Map
+// @Router /cursos/{codigo} [put]
 func (c *CursoController) UpdateCurso(ctx *fiber.Ctx) error {
 	codigoStr := ctx.Params("codigo")
 
@@ -84,7 +127,16 @@ func (c *CursoController) UpdateCurso(ctx *fiber.Ctx) error {
 	return ctx.JSON(fiber.Map{"message": "Curso actualizado correctamente"})
 }
 
-// Eliminar un curso
+// DeleteCurso godoc
+// @Summary Eliminar un curso
+// @Description Elimina un curso según su código
+// @Tags cursos
+// @Produce json
+// @Param codigo path string true "Código del curso"
+// @Success 200 {object} fiber.Map
+// @Failure 400 {object} fiber.Map
+// @Failure 500 {object} fiber.Map
+// @Router /cursos/{codigo} [delete]
 func (c *CursoController) DeleteCurso(ctx *fiber.Ctx) error {
 	codigoStr := ctx.Params("codigo")
 

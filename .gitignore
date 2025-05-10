@@ -15,6 +15,4 @@ poetry.lock
 .coverage
 
 *.sqlite3
-.env
-
 .ropeproject
