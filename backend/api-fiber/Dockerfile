@@ -14,7 +14,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Build the Go application
-RUN go build -o main ./app/bootstrap
+RUN go build -o main ./bootstrap
 
 # Expose the port the app runs on
 EXPOSE 8070
