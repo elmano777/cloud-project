@@ -4,9 +4,6 @@ FROM golang:1.20-alpine
 # Set the working directory inside the container
 WORKDIR /app
 
-# Install goose CLI tool
-RUN go install github.com/pressly/goose/v3/cmd/goose@latest
-
 # Copy Go source files
 COPY ./app ./app
 COPY ./database ./database
