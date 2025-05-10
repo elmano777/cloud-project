@@ -8,13 +8,17 @@ WHERE
 LIMIT
     1;
 
--- name: ListCursos :many
+-- name: ListCursosWithPagination :many
 SELECT
     *
 FROM
     cursos
 ORDER BY
-    nombre;
+    nombre
+LIMIT
+    ?
+OFFSET
+    ?;
 
 -- name: CreateCurso :execresult
 INSERT INTO

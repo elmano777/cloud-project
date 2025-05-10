@@ -24,8 +24,9 @@ export class UsuariosService {
     return nuevoUsuario[0];
   }
 
-  async findAll() {
-    return await db.select().from(usuariosTable);
+  async findAll(limit = 10, page = 1) {
+    const offset = (page - 1) * limit;
+    return await db.select().from(usuariosTable).limit(limit).offset(offset);
   }
 
   async findOne(id: number) {

@@ -4,6 +4,6 @@ import "time"
 
 type EstudianteCurso struct {
 	EstudianteID int
-	CursoCodigo  string
+	CursoCodigo  int
 	InscritoEn   time.Time
 }

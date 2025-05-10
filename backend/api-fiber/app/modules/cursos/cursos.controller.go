@@ -86,7 +86,10 @@ func (c *CursoController) GetCursoByCodigo(ctx *fiber.Ctx) error {
 // @Failure 500 {object} fiber.Map
 // @Router /cursos [get]
 func (c *CursoController) ListCursos(ctx *fiber.Ctx) error {
-	result, err := c.cursoService.ListCursos(ctx.Context())
+	limit, _ := strconv.Atoi(ctx.Query("limit", "10"))
+	page, _ := strconv.Atoi(ctx.Query("page", "1"))
+
+	result, err := c.cursoService.ListCursos(ctx.Context(), limit, page)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

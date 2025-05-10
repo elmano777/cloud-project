@@ -20,9 +20,11 @@ async def crear_calificacion(data: Calificacion):
     created = await coleccion.find_one({"_id": result.inserted_id})
     return convert_objectid(created)
 
-async def obtener_calificaciones():
+async def obtener_calificaciones(limit=10, page=1):
     calificaciones = []
-    async for cal in coleccion.find({}):  # <-- typo fixed
+    skip = (page - 1) * limit
+    cursor = coleccion.find({}).skip(skip).limit(limit)
+    async for cal in cursor:
         calificaciones.append(convert_objectid(cal))
     return calificaciones
 

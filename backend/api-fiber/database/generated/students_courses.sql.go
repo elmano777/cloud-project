@@ -11,16 +11,15 @@ import (
 )
 
 const createInscripcion = `-- name: CreateInscripcion :execresult
-INSERT INTO estudiante_cursos (
-  estudiante_id, curso_codigo
-) VALUES (
-  ?, ?
-)
+INSERT INTO
+    estudiante_cursos (estudiante_id, curso_codigo)
+VALUES
+    (?, ?)
 `
 
 type CreateInscripcionParams struct {
 	EstudianteID int32
-	CursoCodigo  string
+	CursoCodigo  int32
 }
 
 func (q *Queries) CreateInscripcion(ctx context.Context, arg CreateInscripcionParams) (sql.Result, error) {
@@ -29,12 +28,14 @@ func (q *Queries) CreateInscripcion(ctx context.Context, arg CreateInscripcionPa
 
 const deleteInscripcion = `-- name: DeleteInscripcion :exec
 DELETE FROM estudiante_cursos
-WHERE estudiante_id = ? AND curso_codigo = ?
+WHERE
+    estudiante_id = ?
+    AND curso_codigo = ?
 `
 
 type DeleteInscripcionParams struct {
 	EstudianteID int32
-	CursoCodigo  string
+	CursoCodigo  int32
 }
 
 func (q *Queries) DeleteInscripcion(ctx context.Context, arg DeleteInscripcionParams) error {
@@ -44,17 +45,19 @@ func (q *Queries) DeleteInscripcion(ctx context.Context, arg DeleteInscripcionPa
 
 const deleteInscripcionesByCurso = `-- name: DeleteInscripcionesByCurso :exec
 DELETE FROM estudiante_cursos
-WHERE curso_codigo = ?
+WHERE
+    curso_codigo = ?
 `
 
-func (q *Queries) DeleteInscripcionesByCurso(ctx context.Context, cursoCodigo string) error {
+func (q *Queries) DeleteInscripcionesByCurso(ctx context.Context, cursoCodigo int32) error {
 	_, err := q.db.ExecContext(ctx, deleteInscripcionesByCurso, cursoCodigo)
 	return err
 }
 
 const deleteInscripcionesByEstudiante = `-- name: DeleteInscripcionesByEstudiante :exec
 DELETE FROM estudiante_cursos
-WHERE estudiante_id = ?
+WHERE
+    estudiante_id = ?
 `
 
 func (q *Queries) DeleteInscripcionesByEstudiante(ctx context.Context, estudianteID int32) error {
@@ -63,13 +66,20 @@ func (q *Queries) DeleteInscripcionesByEstudiante(ctx context.Context, estudiant
 }
 
 const getInscripcion = `-- name: GetInscripcion :one
-SELECT estudiante_id, curso_codigo, inscrito_en FROM estudiante_cursos
-WHERE estudiante_id = ? AND curso_codigo = ? LIMIT 1
+SELECT
+    estudiante_id, curso_codigo, inscrito_en
+FROM
+    estudiante_cursos
+WHERE
+    estudiante_id = ?
+    AND curso_codigo = ?
+LIMIT
+    1
 `
 
 type GetInscripcionParams struct {
 	EstudianteID int32
-	CursoCodigo  string
+	CursoCodigo  int32
 }
 
 func (q *Queries) GetInscripcion(ctx context.Context, arg GetInscripcionParams) (EstudianteCurso, error) {
@@ -79,14 +89,29 @@ func (q *Queries) GetInscripcion(ctx context.Context, arg GetInscripcionParams) 
 	return i, err
 }
 
-const listInscripcionesByCurso = `-- name: ListInscripcionesByCurso :many
-SELECT estudiante_id, curso_codigo, inscrito_en FROM estudiante_cursos
-WHERE curso_codigo = ?
-ORDER BY inscrito_en
+const listInscripcionesByCursoWithPagination = `-- name: ListInscripcionesByCursoWithPagination :many
+SELECT
+    estudiante_id, curso_codigo, inscrito_en
+FROM
+    estudiante_cursos
+WHERE
+    curso_codigo = ?
+ORDER BY
+    inscrito_en
+LIMIT
+    ?
+OFFSET
+    ?
 `
 
-func (q *Queries) ListInscripcionesByCurso(ctx context.Context, cursoCodigo string) ([]EstudianteCurso, error) {
-	rows, err := q.db.QueryContext(ctx, listInscripcionesByCurso, cursoCodigo)
+type ListInscripcionesByCursoWithPaginationParams struct {
+	CursoCodigo int32
+	Limit       int32
+	Offset      int32
+}
+
+func (q *Queries) ListInscripcionesByCursoWithPagination(ctx context.Context, arg ListInscripcionesByCursoWithPaginationParams) ([]EstudianteCurso, error) {
+	rows, err := q.db.QueryContext(ctx, listInscripcionesByCursoWithPagination, arg.CursoCodigo, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -108,14 +133,29 @@ func (q *Queries) ListInscripcionesByCurso(ctx context.Context, cursoCodigo stri
 	return items, nil
 }
 
-const listInscripcionesByEstudiante = `-- name: ListInscripcionesByEstudiante :many
-SELECT estudiante_id, curso_codigo, inscrito_en FROM estudiante_cursos
-WHERE estudiante_id = ?
-ORDER BY inscrito_en
+const listInscripcionesByEstudianteWithPagination = `-- name: ListInscripcionesByEstudianteWithPagination :many
+SELECT
+    estudiante_id, curso_codigo, inscrito_en
+FROM
+    estudiante_cursos
+WHERE
+    estudiante_id = ?
+ORDER BY
+    inscrito_en
+LIMIT
+    ?
+OFFSET
+    ?
 `
 
-func (q *Queries) ListInscripcionesByEstudiante(ctx context.Context, estudianteID int32) ([]EstudianteCurso, error) {
-	rows, err := q.db.QueryContext(ctx, listInscripcionesByEstudiante, estudianteID)
+type ListInscripcionesByEstudianteWithPaginationParams struct {
+	EstudianteID int32
+	Limit        int32
+	Offset       int32
+}
+
+func (q *Queries) ListInscripcionesByEstudianteWithPagination(ctx context.Context, arg ListInscripcionesByEstudianteWithPaginationParams) ([]EstudianteCurso, error) {
+	rows, err := q.db.QueryContext(ctx, listInscripcionesByEstudianteWithPagination, arg.EstudianteID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

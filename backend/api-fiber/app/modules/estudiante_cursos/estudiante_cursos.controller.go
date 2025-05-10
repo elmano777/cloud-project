@@ -101,8 +101,11 @@ func (c *EstudianteCursoController) GetCursosByEstudiante(ctx *fiber.Ctx) error 
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid student ID"})
 	}
 
+	// Default pagination parameters
+	page := 1
+	limit := 10
 	// Obtener los cursos en los que está inscrito el estudiante
-	cursos, err := c.service.GetCursosDelEstudiante(ctx.Context(), id)
+	cursos, err := c.service.GetCursosDelEstudiante(ctx.Context(), id, page, limit)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -121,8 +124,15 @@ func (c *EstudianteCursoController) GetCursosByEstudiante(ctx *fiber.Ctx) error 
 // @Failure 500 {object} fiber.Map
 // @Router /estudiante-cursos/curso/{codigo} [get]
 func (c *EstudianteCursoController) GetEstudiantesByCurso(ctx *fiber.Ctx) error {
-	codigo := ctx.Params("codigo")
-	estudiantes, err := c.service.GetEstudiantesByCurso(ctx.Context(), codigo)
+	cursoID, err := ctx.ParamsInt("codigo")
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid course ID"})
+	}
+
+	page := 1
+	limit := 10
+
+	estudiantes, err := c.service.GetEstudiantesByCurso(ctx.Context(), cursoID, page, limit)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

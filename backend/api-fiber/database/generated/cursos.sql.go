@@ -68,17 +68,26 @@ func (q *Queries) GetCurso(ctx context.Context, codigo int32) (Curso, error) {
 	return i, err
 }
 
-const listCursos = `-- name: ListCursos :many
+const listCursosWithPagination = `-- name: ListCursosWithPagination :many
 SELECT
     codigo, nombre, horario, ciclo, created_at
 FROM
     cursos
 ORDER BY
     nombre
+LIMIT
+    ?
+OFFSET
+    ?
 `
 
-func (q *Queries) ListCursos(ctx context.Context) ([]Curso, error) {
-	rows, err := q.db.QueryContext(ctx, listCursos)
+type ListCursosWithPaginationParams struct {
+	Limit  int32
+	Offset int32
+}
+
+func (q *Queries) ListCursosWithPagination(ctx context.Context, arg ListCursosWithPaginationParams) ([]Curso, error) {
+	rows, err := q.db.QueryContext(ctx, listCursosWithPagination, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

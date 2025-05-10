@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
@@ -46,8 +47,8 @@ export class UsuariosController {
     description: 'Lista de todos los usuarios.',
     type: [UsuarioEntity],
   })
-  findAll() {
-    return this.usuariosService.findAll();
+  findAll(@Query('limit') limit = 10, @Query('page') page = 1) {
+    return this.usuariosService.findAll(+limit, +page);
   }
 
   @Get(':id')

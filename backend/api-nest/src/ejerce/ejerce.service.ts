@@ -20,8 +20,9 @@ export class EjerceService {
     return nuevo;
   }
 
-  async findAll() {
-    return await db.select().from(ejerceTable);
+  async findAll(limit = 10, page = 1) {
+    const offset = (page - 1) * limit;
+    return await db.select().from(ejerceTable).limit(limit).offset(offset);
   }
 
   async findOne(id: number) {

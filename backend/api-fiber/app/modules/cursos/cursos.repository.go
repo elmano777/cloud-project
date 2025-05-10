@@ -35,8 +35,11 @@ func (r *CursoRepository) CreateCurso(ctx context.Context, params generated.Crea
 	return &curso, nil
 }
 
-func (r *CursoRepository) ListCursos(ctx context.Context) ([]generated.Curso, error) {
-	return r.queries.ListCursos(ctx)
+func (r *CursoRepository) ListCursos(ctx context.Context, limit, offset int) ([]generated.Curso, error) {
+	return r.queries.ListCursosWithPagination(ctx, generated.ListCursosWithPaginationParams{
+		Limit:  int32(limit),
+		Offset: int32(offset),
+	})
 }
 
 func (r *CursoRepository) UpdateCurso(ctx context.Context, params generated.UpdateCursoParams) error {
