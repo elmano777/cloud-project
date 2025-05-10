@@ -30,6 +30,8 @@ services:
       - "8070:8070"
     networks:
       - mi_red
+    volumes:
+      - ./backend/api-fiber/docs:/app/docs
 
   api-fastapi:
     restart: always

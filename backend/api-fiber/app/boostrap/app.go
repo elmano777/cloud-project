@@ -64,7 +64,7 @@ func InitializeApp() *fiber.App {
 
 	app.Use(swagger.New(swagger.Config{
 		BasePath: "/",
-		FilePath: "./docs/swagger.json",
+		FilePath: "/app/docs/swagger.json",
 		Path:     "docs",
 		Title:    "API de Gestión de Cursos y Estudiantes",
 	}))
