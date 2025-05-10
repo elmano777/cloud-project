@@ -1,0 +1,24 @@
+services:
+  ingesta01:
+    volumes:
+    - /home/ubuntu/.aws/credentials:/root/.aws/credentials
+    build: ingesta01/.
+    env_file:
+      - .env
+    container_name: ingesta01
+
+  ingesta02:
+    volumes:
+    - /home/ubuntu/.aws/credentials:/root/.aws/credentials
+    build: ingesta02/.
+    env_file:
+      - .env
+    container_name: ingesta02
+
+  ingesta03:
+    volumes:
+    - /home/ubuntu/.aws/credentials:/root/.aws/credentials
+    build: ingesta03/.
+    env_file:
+      - .env
+    container_name: ingesta03
