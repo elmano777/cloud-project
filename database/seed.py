@@ -41,11 +41,16 @@ mongo_db = mongo_client[os.getenv("MONGO_DB", "calificaciones")]
 calificaciones_collection = mongo_db["calificacion"]
 
 # Crear 10,000 profesores y 10,000 estudiantes
+emails_generados = set()
 print("Seeding PostgreSQL (Usuarios)...")
 for i in range(20000):
     nombre = faker.first_name()
     apellido = faker.last_name()
+    # Asegurarse de que el correo electrónico sea único
     email = faker.email()
+    while email in emails_generados:
+        email = faker.email()  # Generar uno nuevo si ya existe
+    emails_generados.add(email)
     password = bcrypt.hashpw(faker.password().encode(), bcrypt.gensalt()).decode()
     rol = "profesor" if i < 10000 else "estudiante"
     activo = True
