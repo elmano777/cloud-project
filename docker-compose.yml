@@ -42,6 +42,8 @@ services:
       - "8080:80"
     networks:
       - mi_red
+    volumes:
+      - ./docs:/app/docs
 
   orquestador:
     restart: always
