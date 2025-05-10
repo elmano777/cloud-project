@@ -41,7 +41,7 @@ services:
     environment:
       MONGO_URL: mongodb://54.208.77.229:27017
     ports:
-      - "9001:80"
+      - "9001:9001"
     networks:
       - mi_red
     volumes:
