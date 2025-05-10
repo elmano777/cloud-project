@@ -1,4 +1,387 @@
+basePath: /
+definitions:
+  cursos.CreateCursoRequest:
+    properties:
+      ciclo:
+        description: 'Ejemplo: "2023-1", "2023-2"'
+        maxLength: 20
+        minLength: 5
+        type: string
+      codigo:
+        maximum: 20
+        minimum: 5
+        type: integer
+      horario:
+        maxLength: 50
+        minLength: 5
+        type: string
+      nombre:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - ciclo
+    - codigo
+    - horario
+    - nombre
+    type: object
+  cursos.CursoResponse:
+    properties:
+      ciclo:
+        type: string
+      codigo:
+        type: integer
+      created_at:
+        type: string
+      estudiantes_count:
+        type: integer
+      horario:
+        type: string
+      nombre:
+        type: string
+    type: object
+  cursos.UpdateCursoRequest:
+    properties:
+      ciclo:
+        maxLength: 20
+        minLength: 5
+        type: string
+      codigo:
+        maximum: 20
+        minimum: 5
+        type: integer
+      horario:
+        maxLength: 50
+        minLength: 5
+        type: string
+      nombre:
+        maxLength: 100
+        minLength: 3
+        type: string
+    type: object
+  estudiantecurso.DesinscripcionRequest:
+    properties:
+      curso_codigo:
+        maxLength: 20
+        minLength: 5
+        type: string
+      estudiante_id:
+        type: integer
+    required:
+    - curso_codigo
+    - estudiante_id
+    type: object
+  estudiantecurso.EstudianteCurso:
+    properties:
+      cursoCodigo:
+        type: string
+      estudianteID:
+        type: integer
+      inscritoEn:
+        type: string
+    type: object
+  estudiantecurso.InscripcionRequest:
+    properties:
+      curso_codigo:
+        maxLength: 20
+        minLength: 5
+        type: string
+      estudiante_id:
+        type: integer
+    required:
+    - curso_codigo
+    - estudiante_id
+    type: object
+  fiber.Map:
+    additionalProperties: true
+    type: object
+host: localhost:8070
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: support@example.com
+    name: Soporte API
+  description: API para la gestión de cursos y matrículas de estudiantes
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: API de Gestión de Cursos y Estudiantes
+  version: "1.0"
+paths:
+  /cursos:
+    get:
+      description: Obtiene una lista paginada de todos los cursos disponibles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/cursos.CursoResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Listar todos los cursos
+      tags:
+      - cursos
+    post:
+      consumes:
+      - application/json
+      description: Crea un nuevo curso en el sistema
+      parameters:
+      - description: Datos del curso
+        in: body
+        name: curso
+        required: true
+        schema:
+          $ref: '#/definitions/cursos.CreateCursoRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/cursos.CursoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Crear un nuevo curso
+      tags:
+      - cursos
+  /cursos/{codigo}:
+    delete:
+      description: Elimina un curso según su código
+      parameters:
+      - description: Código del curso
+        in: path
+        name: codigo
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Eliminar un curso
+      tags:
+      - cursos
+    get:
+      description: Obtiene la información de un curso específico según su código
+      parameters:
+      - description: Código del curso
+        in: path
+        name: codigo
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/cursos.CursoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Obtener un curso por su código
+      tags:
+      - cursos
+    put:
+      consumes:
+      - application/json
+      description: Actualiza la información de un curso según su código
+      parameters:
+      - description: Código del curso
+        in: path
+        name: codigo
+        required: true
+        type: string
+      - description: Datos actualizados del curso
+        in: body
+        name: curso
+        required: true
+        schema:
+          $ref: '#/definitions/cursos.UpdateCursoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Actualizar un curso existente
+      tags:
+      - cursos
+  /cursos/test:
+    get:
+      description: Verifica si el controlador de cursos está funcionando correctamente
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: CursoController funcionando correctamente
+          schema:
+            type: string
+      summary: Endpoint de prueba para cursos
+      tags:
+      - cursos
+  /estudiante-cursos:
+    delete:
+      consumes:
+      - application/json
+      description: Elimina la inscripción de un estudiante en un curso específico
+      parameters:
+      - description: Datos de desinscripción
+        in: body
+        name: desinscripcion
+        required: true
+        schema:
+          $ref: '#/definitions/estudiantecurso.DesinscripcionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Desinscribir estudiante de curso
+      tags:
+      - estudiante-cursos
+    post:
+      consumes:
+      - application/json
+      description: Inscribe a un estudiante en un curso específico
+      parameters:
+      - description: Datos de inscripción
+        in: body
+        name: inscripcion
+        required: true
+        schema:
+          $ref: '#/definitions/estudiantecurso.InscripcionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Inscribir estudiante en curso
+      tags:
+      - estudiante-cursos
+  /estudiante-cursos/curso/{codigo}:
+    get:
+      description: Obtiene todos los estudiantes inscritos en un curso específico
+      parameters:
+      - description: Código del curso
+        in: path
+        name: codigo
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/estudiantecurso.EstudianteCurso'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Obtener estudiantes de un curso
+      tags:
+      - estudiante-cursos
+  /estudiante-cursos/estudiante/{id}:
+    get:
+      description: Obtiene todos los cursos en los que está inscrito un estudiante
+        específico
+      parameters:
+      - description: ID del estudiante
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/estudiantecurso.EstudianteCurso'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: Obtener cursos de un estudiante
+      tags:
+      - estudiante-cursos
+  /estudiante-cursos/test:
+    get:
+      description: Verifica si el controlador de estudiante-cursos está funcionando
+        correctamente
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Endpoint de prueba para estudiante-cursos
+          schema:
+            type: string
+      summary: Endpoint de prueba para estudiante-cursos
+      tags:
+      - estudiante-cursos
 swagger: "2.0"
