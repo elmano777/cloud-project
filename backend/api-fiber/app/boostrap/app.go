@@ -11,7 +11,7 @@ import (
 	estudiantecurso "api-fiber/app/modules/estudiante_cursos"
 	"api-fiber/database/connections"
 
-	swagger "github.com/gofiber/contrib/swagger"
+	"github.com/gofiber/contrib/swagger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -55,7 +55,7 @@ func InitializeApp() *fiber.App {
 	app.Use(swagger.New(swagger.Config{
 		BasePath: "/",
 		FilePath: "./docs/swagger.json",
-		Path:     "swagger",
+		Path:     "docs",
 		Title:    "API de Gestión de Cursos y Estudiantes",
 	}))
 

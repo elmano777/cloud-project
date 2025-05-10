@@ -1,10 +1,10 @@
+// main.go
 package main
 
 import (
-	"log"
-
 	bootstrap "api-fiber/app/boostrap"
 	_ "api-fiber/docs"
+	"log"
 )
 
 // @title API de Gestión de Cursos y Estudiantes
@@ -19,7 +19,6 @@ import (
 // @BasePath /
 func main() {
 	app := bootstrap.InitializeApp()
-
 	log.Println("🚀 Servidor iniciado en http://localhost:8070")
 	app.Listen(":8070")
 }
