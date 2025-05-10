@@ -24,11 +24,6 @@ ENV GOOSE_MIGRATION_DIR=./database/migrations
 
 ENV GOOSE_TABLE=custom.goose_migrations
 
-# Install goose CLI tool
-
-RUN go install github.com/pressly/goose/v3/cmd/goose@latest
-
-
 # Copy the Go source files into the container
 
 COPY . .
@@ -38,3 +33,6 @@ RUN go build -o main .
 # Expoe the port the app runs on
 
 EXPOSE 8070
+
+# Command to run when the container starts
+CMD ["./main"]
