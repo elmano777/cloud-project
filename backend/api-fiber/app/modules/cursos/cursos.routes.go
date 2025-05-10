@@ -11,7 +11,7 @@ func SetupCursoRoutes(app *fiber.App, queries *generated.Queries) {
 	cursoService := NewCursoService(cursoRepo)
 	cursoController := NewCursoController(cursoService)
 
-	// Rutas básicas para Cursos
+	app.Get("/cursos/test", cursoController.Testing)
 	app.Post("/cursos", cursoController.CreateCurso)
 	app.Get("/cursos/:codigo", cursoController.GetCursoByCodigo)
 	app.Get("/cursos", cursoController.ListCursos)

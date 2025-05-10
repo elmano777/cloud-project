@@ -7,21 +7,17 @@ import (
 )
 
 func SetupEstudianteCursoRoutes(app *fiber.App, queries *generated.Queries) {
-	// Repositorio
 	estudianteCursoRepo := NewEstudianteCursoRepository(queries)
 
-	// Cliente para validar el estudiante
 	userClient := NewUserClient()
 
-	// Servicio
 	estudianteCursoService := NewEstudianteCursoService(estudianteCursoRepo, userClient)
 
-	// Controlador
 	estudianteCursoController := NewEstudianteCursoController(estudianteCursoService)
 
-	// Rutas de estudiante-cursos
-	app.Post("/estudiante-cursos", estudianteCursoController.Inscribir)                           // POST /estudiante-cursos
-	app.Delete("/estudiante-cursos", estudianteCursoController.Desinscribir)                      // DELETE /estudiante-cursos
-	app.Get("/estudiante-cursos/estudiante/:id", estudianteCursoController.GetCursosByEstudiante) // GET /estudiante-cursos/estudiante/:id
-	app.Get("/estudiante-cursos/curso/:codigo", estudianteCursoController.GetEstudiantesByCurso)  // GET /estudiante-cursos/curso/:codigo
+	app.Get("/estudiante-cursos/test", estudianteCursoController.Testing)
+	app.Post("/estudiante-cursos", estudianteCursoController.Inscribir)
+	app.Delete("/estudiante-cursos", estudianteCursoController.Desinscribir)
+	app.Get("/estudiante-cursos/estudiante/:id", estudianteCursoController.GetCursosByEstudiante)
+	app.Get("/estudiante-cursos/curso/:codigo", estudianteCursoController.GetEstudiantesByCurso)
 }

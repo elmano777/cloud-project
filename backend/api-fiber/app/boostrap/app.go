@@ -11,6 +11,7 @@ import (
 	estudiantecurso "api-fiber/app/modules/estudiante_cursos"
 	"api-fiber/database/connections"
 
+	swagger "github.com/gofiber/contrib/swagger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -51,14 +52,19 @@ func InitializeApp() *fiber.App {
 	app.Use(logger.New())
 	app.Use(recover.New())
 
-	// Rutas básicas
+	app.Use(swagger.New(swagger.Config{
+		BasePath: "/",
+		FilePath: "./docs/swagger.json",
+		Path:     "swagger",
+		Title:    "API de Gestión de Cursos y Estudiantes",
+	}))
+
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
 
-	// Rutas de autenticación y perfil
 	cursos.SetupCursoRoutes(app, queries)
-	estudiantecurso.SetupEstudianteCursoRoutes(app, queries) // Aquí se configuran las rutas de estudiante-cursos
+	estudiantecurso.SetupEstudianteCursoRoutes(app, queries)
 
 	fmt.Println("✅ Aplicación iniciada correctamente")
 	return app
