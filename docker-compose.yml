@@ -1,5 +1,6 @@
 services:
   api-nest:
+    restart: always
     build:
       context: ./backend/api-nest
     container_name: mi-nestjs-container
@@ -11,6 +12,7 @@ services:
       - mi_red
 
   api-go:
+    restart: always
     build:
       context: ./backend/api-fiber
     container_name: mi-go-container
@@ -30,6 +32,7 @@ services:
       - mi_red
 
   api-fastapi:
+    restart: always
     build:
       context: ./backend/api-fast
     container_name: mi-fastapi-container
@@ -41,6 +44,7 @@ services:
       - mi_red
 
   orquestador:
+    restart: always
     build:
       context: ./backend/api-orquestador
     container_name: orquestador
