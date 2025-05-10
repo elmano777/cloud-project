@@ -4,20 +4,37 @@ FROM golang:latest
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy Go source files
-COPY ./app ./app
-COPY ./database ./database
-COPY ./docs ./docs
-COPY go.mod go.sum ./
+# Set environment variables
 
-# Install dependencies
-RUN go mod download
+ENV DB_HOST=mysql_goose
 
-# Build the Go application
-RUN go build -o main ./bootstrap
+ENV DB_PORT=3306
 
-# Expose the port the app runs on
+ENV DB_USER=root
+
+ENV DB_PASSWORD=mi_password
+
+ENV DB_NAME=cursos
+
+ENV GOOSE_DRIVER=mysql
+
+ENV GOOSE_DBSTRING="root:mi_password@tcp(mysql_goose:3306)/cursos?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci"
+
+ENV GOOSE_MIGRATION_DIR=./database/migrations
+
+ENV GOOSE_TABLE=custom.goose_migrations
+
+# Install goose CLI tool
+
+RUN go install github.com/pressly/goose/v3/cmd/goose@latest
+
+
+# Copy the Go source files into the container
+
+COPY . .
+
+RUN go build -o main .
+
+# Expoe the port the app runs on
+
 EXPOSE 8070
-
-# Command to run when the container starts
-CMD ["./main"]
