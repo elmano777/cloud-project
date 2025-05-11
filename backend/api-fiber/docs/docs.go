@@ -529,9 +529,9 @@ const docTemplate = `{
             ],
             "properties": {
                 "curso_codigo": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 5
+                    "type": "integer",
+                    "maximum": 20,
+                    "minimum": 5
                 },
                 "estudiante_id": {
                     "type": "integer"
@@ -542,7 +542,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "cursoCodigo": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "estudianteID": {
                     "type": "integer"
@@ -560,9 +560,9 @@ const docTemplate = `{
             ],
             "properties": {
                 "curso_codigo": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 5
+                    "type": "integer",
+                    "maximum": 20,
+                    "minimum": 5
                 },
                 "estudiante_id": {
                     "type": "integer"
@@ -579,7 +579,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8070",
+	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "API de Gestión de Cursos y Estudiantes",

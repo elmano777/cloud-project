@@ -26,11 +26,14 @@ async def crear_nota(data: Nota):
     created = await coleccion.find_one({"_id": result.inserted_id})
     return convert_objectid(created)
 
-async def obtener_notas():
+async def obtener_notas(limit=10, page=1):
     notas = []
-    async for doc in coleccion.find({}):
+    skip = (page - 1) * limit
+    cursor = coleccion.find({}).skip(skip).limit(limit)
+    async for doc in cursor:
         notas.append(convert_objectid(doc))
     return notas
+
 
 async def obtener_nota(id_nota: int):
     nota = await coleccion.find_one({"id_nota": id_nota})

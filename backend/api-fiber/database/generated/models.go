@@ -18,6 +18,6 @@ type Curso struct {
 
 type EstudianteCurso struct {
 	EstudianteID int32
-	CursoCodigo  string
+	CursoCodigo  int32
 	InscritoEn   sql.NullTime
 }

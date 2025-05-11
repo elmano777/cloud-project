@@ -8,7 +8,9 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY seed.py seed.py
+COPY seed_pg.py seed_pg.py
+COPY seed_md.py seed_md.py
+COPY seed_pg.py seed_pg.py
 COPY .env .env
 
 # Esperar a que las bases de datos estén listas antes de ejecutar el script

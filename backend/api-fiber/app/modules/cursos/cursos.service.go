@@ -64,8 +64,9 @@ func (s *CursoService) GetCursoByCodigo(ctx context.Context, codigo int) (*Curso
 	}, nil
 }
 
-func (s *CursoService) ListCursos(ctx context.Context) ([]CursoResponse, error) {
-	cursos, err := s.repo.ListCursos(ctx)
+func (s *CursoService) ListCursos(ctx context.Context, limit, page int) ([]CursoResponse, error) {
+	offset := (page - 1) * limit
+	cursos, err := s.repo.ListCursos(ctx, limit, offset)
 	if err != nil {
 		return nil, err
 	}

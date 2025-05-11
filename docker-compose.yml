@@ -41,7 +41,7 @@ services:
     environment:
       MONGO_URL: mongodb://54.208.77.229:27017
     ports:
-      - "8080:80"
+      - "9001:9001"
     networks:
       - mi_red
     volumes:
@@ -55,7 +55,7 @@ services:
     environment:
       USUARIOS_SERVICE_URL: http://api-nest:3000
       CURSOS_SERVICE_URL: http://api-go:8070
-      NOTAS_SERVICE_URL: http://api-fastapi:80
+      NOTAS_SERVICE_URL: http://api-fastapi:9001
     ports:
       - "9000:9000"
     depends_on:

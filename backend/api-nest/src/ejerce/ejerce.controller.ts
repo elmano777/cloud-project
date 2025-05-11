@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { EjerceService } from './ejerce.service';
 import { CreateEjerceDto } from './dto/create-ejerce.dto';
@@ -45,8 +46,8 @@ export class EjerceController {
     description: 'Lista de todas las asignaciones.',
     type: EjerceEntity,
   })
-  findAll() {
-    return this.ejerceService.findAll();
+  findAll(@Query('limit') limit = 10, @Query('page') page = 1) {
+    return this.ejerceService.findAll(+limit, +page);
   }
 
   @Get(':id')

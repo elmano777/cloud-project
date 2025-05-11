@@ -39,15 +39,35 @@ services:
     networks:
       - mi_red
 
-  data-seeder:
+  data-seeder_pg:
     restart: always
     build: .
-    container_name: data-seeder
+    container_name: data-seeder_pg
     env_file:
       - .env
     depends_on:
       - postgres-db
+    networks:
+      - mi_red
+
+  data-seeder_mysql:
+    restart: always
+    build: .
+    container_name: data-seeder_mysql
+    env_file:
+      - .env
+    depends_on:
       - mysql-db
+    networks:
+      - mi_red
+
+  data-seeder_mongo:
+    restart: always
+    build: .
+    container_name: data-seeder_mongo
+    env_file:
+      - .env
+    depends_on:
       - mongo-db
     networks:
       - mi_red

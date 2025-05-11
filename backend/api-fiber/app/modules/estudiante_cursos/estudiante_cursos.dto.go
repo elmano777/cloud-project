@@ -1,12 +1,12 @@
 package estudiantecurso
 
 type InscripcionRequest struct {
-	EstudianteID int    `json:"estudiante_id" validate:"required"`
-	CursoCodigo  string `json:"curso_codigo" validate:"required,min=5,max=20"`
+	EstudianteID int `json:"estudiante_id" validate:"required"`
+	CursoCodigo  int `json:"curso_codigo" validate:"required,min=5,max=20"`
 }
 
 type CursoResponse struct {
-	Codigo  string `json:"codigo"`
+	Codigo  int    `json:"codigo"`
 	Nombre  string `json:"nombre"`
 	Horario string `json:"horario"`
 	Ciclo   string `json:"ciclo"`
@@ -21,6 +21,6 @@ type ListCursosResponse struct {
 }
 
 type DesinscripcionRequest struct {
-	EstudianteID int    `json:"estudiante_id" validate:"required"`
-	CursoCodigo  string `json:"curso_codigo" validate:"required,min=5,max=20"`
+	EstudianteID int `json:"estudiante_id" validate:"required"`
+	CursoCodigo  int `json:"curso_codigo" validate:"required,min=5,max=20"`
 }

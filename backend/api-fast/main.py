@@ -1,8 +1,18 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from models import Calificacion, Nota
 import crud_calificaciones, crud_nota
 
 app = FastAPI()
+
+# Configurar CORS para permitir cualquier dominio
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite cualquier origen
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos
+    allow_headers=["*"],  # Permite todos los headers
+)
 
 # --- Endpoints Calificacion ---
 @app.post("/calificacion/")
@@ -10,8 +20,8 @@ async def crear_calificacion(data: Calificacion):
     return await crud_calificaciones.crear_calificacion(data)
 
 @app.get("/calificacion/")
-async def listar_calificaciones():
-    return await crud_calificaciones.obtener_calificaciones()
+async def listar_calificaciones(limit: int = 10, page: int = 1):
+    return await crud_calificaciones.obtener_calificaciones(limit, page)
 
 @app.get("/calificacion/{id_nota}")
 async def obtener_calificacion(id_nota: int):
@@ -32,8 +42,8 @@ async def crear_nota(data: Nota):
     return await crud_nota.crear_nota(data)
 
 @app.get("/nota/")
-async def listar_notas():
-    return await crud_nota.obtener_notas()
+async def listar_notas(limit: int = 10, page: int = 1):
+    return await crud_nota.obtener_notas(limit, page)
 
 @app.get("/nota/{id_nota}")
 async def obtener_nota(id_nota: int):
