@@ -100,18 +100,15 @@ ORDER BY
     inscrito_en
 LIMIT
     ?
-OFFSET
-    ?
 `
 
 type ListInscripcionesByCursoWithPaginationParams struct {
 	CursoCodigo int32
 	Limit       int32
-	Offset      int32
 }
 
 func (q *Queries) ListInscripcionesByCursoWithPagination(ctx context.Context, arg ListInscripcionesByCursoWithPaginationParams) ([]EstudianteCurso, error) {
-	rows, err := q.db.QueryContext(ctx, listInscripcionesByCursoWithPagination, arg.CursoCodigo, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listInscripcionesByCursoWithPagination, arg.CursoCodigo, arg.Limit)
 	if err != nil {
 		return nil, err
 	}
@@ -144,18 +141,15 @@ ORDER BY
     inscrito_en
 LIMIT
     ?
-OFFSET
-    ?
 `
 
 type ListInscripcionesByEstudianteWithPaginationParams struct {
 	EstudianteID int32
 	Limit        int32
-	Offset       int32
 }
 
 func (q *Queries) ListInscripcionesByEstudianteWithPagination(ctx context.Context, arg ListInscripcionesByEstudianteWithPaginationParams) ([]EstudianteCurso, error) {
-	rows, err := q.db.QueryContext(ctx, listInscripcionesByEstudianteWithPagination, arg.EstudianteID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listInscripcionesByEstudianteWithPagination, arg.EstudianteID, arg.Limit)
 	if err != nil {
 		return nil, err
 	}
