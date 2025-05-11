@@ -8,7 +8,6 @@ package bootstrap
 // @contact.email support@example.com
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:8070
 // @BasePath /
 import (
 	"fmt"
@@ -62,20 +61,20 @@ func InitializeApp() *fiber.App {
 
 	// Habilitar CORS para cualquier dominio
 	app.Use(cors.New(cors.Config{
-    AllowOrigins:     "*",
-    AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS",
-    AllowHeaders:     "Origin, Content-Type, Accept, Authorization, X-Requested-With",
-    ExposeHeaders:    "Content-Length, Content-Type, Authorization",
-    AllowCredentials: false,
-    MaxAge:           86400, // Preflight requests can be cached for 24 hours
-}))
+		AllowOrigins:     "*",
+		AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization, X-Requested-With",
+		ExposeHeaders:    "Content-Length, Content-Type, Authorization",
+		AllowCredentials: false,
+		MaxAge:           86400, // Preflight requests can be cached for 24 hours
+	}))
 
 	app.Use(logger.New())
 	app.Use(recover.New())
 
 	app.Use(swagger.New(swagger.Config{
 		BasePath: "/",
-		FilePath: "/app/docs/swagger.json",
+		FilePath: "./docs/swagger.json",
 		Path:     "docs",
 		Title:    "API de Gestión de Cursos y Estudiantes",
 	}))

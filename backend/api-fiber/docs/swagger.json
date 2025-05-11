@@ -14,7 +14,6 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8070",
     "basePath": "/",
     "paths": {
         "/cursos": {
@@ -523,9 +522,9 @@
             ],
             "properties": {
                 "curso_codigo": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 5
+                    "type": "integer",
+                    "maximum": 20,
+                    "minimum": 5
                 },
                 "estudiante_id": {
                     "type": "integer"
@@ -536,7 +535,7 @@
             "type": "object",
             "properties": {
                 "cursoCodigo": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "estudianteID": {
                     "type": "integer"
@@ -554,9 +553,9 @@
             ],
             "properties": {
                 "curso_codigo": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 5
+                    "type": "integer",
+                    "maximum": 20,
+                    "minimum": 5
                 },
                 "estudiante_id": {
                     "type": "integer"

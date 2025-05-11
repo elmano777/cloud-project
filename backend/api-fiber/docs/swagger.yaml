@@ -62,9 +62,9 @@ definitions:
   estudiantecurso.DesinscripcionRequest:
     properties:
       curso_codigo:
-        maxLength: 20
-        minLength: 5
-        type: string
+        maximum: 20
+        minimum: 5
+        type: integer
       estudiante_id:
         type: integer
     required:
@@ -74,7 +74,7 @@ definitions:
   estudiantecurso.EstudianteCurso:
     properties:
       cursoCodigo:
-        type: string
+        type: integer
       estudianteID:
         type: integer
       inscritoEn:
@@ -83,9 +83,9 @@ definitions:
   estudiantecurso.InscripcionRequest:
     properties:
       curso_codigo:
-        maxLength: 20
-        minLength: 5
-        type: string
+        maximum: 20
+        minimum: 5
+        type: integer
       estudiante_id:
         type: integer
     required:
@@ -95,7 +95,6 @@ definitions:
   fiber.Map:
     additionalProperties: true
     type: object
-host: localhost:8070
 info:
   contact:
     email: support@example.com
