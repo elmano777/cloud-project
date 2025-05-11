@@ -1,23 +1,24 @@
 import mysql.connector
 import boto3
+import csv
 
 
 HOST = "172.31.86.125" # IPv4 privada de "MV Bases de Datos"
 PORT = "8005"
 USERNAME = "root"
-PASSWORD = "utec"
+PASSWORD = "mi_password"
 DATABASE_NAME = "bd_api_employees"  
 
 
 # Cambiar el nombre del bucket
 BUCKET = "ingesta-bd-storage"
 UPLOAD_FILES = [
-    ("usuarioData.csv", "usuario"),
-    ("ejerceData.csv", "ejerce")
+    ("cursosData.csv", "cursos"),
+    ("estudianteCursosData.csv", "estudiante_cursos")
 ]
 
 
-def get_user_data(table_name: str):
+for filename, table in UPLOAD_FILES:
     mydb = mysql.connector.connect(
         host=HOST,
         port=PORT,
@@ -25,20 +26,24 @@ def get_user_data(table_name: str):
         password=PASSWORD,
         database=DATABASE_NAME
     )  
+
     cursor = mydb.cursor()
-    cursor.execute(f"SELECT * FROM {table_name}")
+
+    cursor.execute(f"SELECT * FROM {table}")
+
+    columnas = [desc[0] for desc in cursor.description]
     result = cursor.fetchall()
+
+    with open(filename, mode="w", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow(columnas)
+        writer.writerows(result)
+
+
     cursor.close()
     mydb.close()
-    return result
-
-
-for filename, table in UPLOAD_FILES:
-    with open(filename, "w") as file:
-        res = get_user_data(table)
-
 
     s3 = boto3.client('s3')
     response = s3.upload_file(filename, BUCKET, filename)
 
-    print(f"Ingesta de {table} completada")
+    print(f"Ingesta de {table} en archivo {filename} completada")
