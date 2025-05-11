@@ -1,8 +1,18 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from models import Calificacion, Nota
 import crud_calificaciones, crud_nota
 
 app = FastAPI()
+
+# Configurar CORS para permitir cualquier dominio
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite cualquier origen
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos
+    allow_headers=["*"],  # Permite todos los headers
+)
 
 # --- Endpoints Calificacion ---
 @app.post("/calificacion/")

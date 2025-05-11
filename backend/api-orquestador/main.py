@@ -1,8 +1,18 @@
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 import httpx
 import os
 
 app = FastAPI()
+
+# Configurar CORS para permitir solicitudes desde cualquier dominio
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permitir todos los orígenes
+    allow_credentials=True,
+    allow_methods=["*"],  # Permitir todos los métodos
+    allow_headers=["*"],  # Permitir todos los headers
+)
 
 USUARIOS_SERVICE_URL = os.getenv("USUARIOS_SERVICE_URL", "http://mi-nestjs-container:3000")
 CURSOS_SERVICE_URL = os.getenv("CURSOS_SERVICE_URL", "http://mi-fiber-container:8070")
