@@ -66,7 +66,7 @@ func InitializeApp() *fiber.App {
     AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS",
     AllowHeaders:     "Origin, Content-Type, Accept, Authorization, X-Requested-With",
     ExposeHeaders:    "Content-Length, Content-Type, Authorization",
-    AllowCredentials: true,
+    AllowCredentials: false,
     MaxAge:           86400, // Preflight requests can be cached for 24 hours
 }))
 
