@@ -43,7 +43,7 @@ calificaciones_collection = mongo_db["calificacion"]
 # Crear 10,000 profesores y 10,000 estudiantes
 emails_generados = set()
 print("Seeding PostgreSQL (Usuarios)...")
-for i in range(20000):
+for i in range(2000):
     nombre = faker.first_name()
     apellido = faker.last_name()
     # Asegurarse de que el correo electrónico sea único
@@ -66,7 +66,7 @@ pg_conn.commit()
 # Crear 20,000 cursos
 print("Seeding MySQL (Cursos)...")
 cursos_insertados = set()  # Set to track inserted course codes
-for i in range(20000):
+for i in range(2000):
     codigo = i + 1000
     if codigo in cursos_insertados:  # Skip if the course code already exists
         continue
@@ -85,7 +85,7 @@ mysql_conn.commit()
 
 # Crear 20,000 calificaciones
 print("Seeding MongoDB (Calificaciones)...")
-for i in range(20000):
+for i in range(2000):
     calificacion = {
         "id_nota": i + 1,
         "codigo_curso": random.randint(1000, 20000),
