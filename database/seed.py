@@ -65,8 +65,12 @@ pg_conn.commit()
 
 # Crear 20,000 cursos
 print("Seeding MySQL (Cursos)...")
+cursos_insertados = set()  # Set to track inserted course codes
 for i in range(20000):
     codigo = i + 1000
+    if codigo in cursos_insertados:  # Skip if the course code already exists
+        continue
+    cursos_insertados.add(codigo)
     nombre = faker.catch_phrase()
     horario = f"{faker.day_of_week()} {random.randint(8, 18)}:00-{random.randint(19, 23)}:00"
     ciclo = f"{random.randint(2021, 2025)}-{random.randint(1, 2)}"
@@ -88,10 +92,14 @@ for i in range(20000):
         "id_estudiante": random.randint(10001, 20000),  # Solo estudiantes
         "profesor_id": random.randint(1, 10000)  # Solo profesores
     }
+
+    # Verificar si ya existe una calificación con el mismo id_nota
+    if calificaciones_collection.find_one({"id_nota": calificacion["id_nota"]}):
+        continue  # Skip if the record already exists
+
     calificaciones_collection.insert_one(calificacion)
 
 print("Datos insertados correctamente.")
-
 # Cerrar conexiones
 pg_cursor.close()
 pg_conn.close()
