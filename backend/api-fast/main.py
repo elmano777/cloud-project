@@ -8,7 +8,7 @@ app = FastAPI()
 # Configurar CORS para permitir cualquier dominio
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://proyecto4-s3.s3-website-us-east-1.amazonaws.com", "http://localhost:4200"],
+    allow_origins=["http://proyecto4-s3.s3-website-us-east-1.amazonaws.com", "http://localhost:4200,  http://proyecto4-s3.s3-website-us-east-1.amazonaws.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
