@@ -8,11 +8,12 @@ app = FastAPI()
 # Configurar CORS para permitir solicitudes desde cualquier dominio
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permitir todos los orígenes
+    allow_origins=["http://proyecto4-s3.s3-website-us-east-1.amazonaws.com", "http://localhost:4200"],
     allow_credentials=True,
-    allow_methods=["*"],  # Permitir todos los métodos
-    allow_headers=["*"],  # Permitir todos los headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 
 USUARIOS_SERVICE_URL = os.getenv("USUARIOS_SERVICE_URL", "http://mi-nestjs-container:3000")
 CURSOS_SERVICE_URL = os.getenv("CURSOS_SERVICE_URL", "http://mi-fiber-container:8070")
