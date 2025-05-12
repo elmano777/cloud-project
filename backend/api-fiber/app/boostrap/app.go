@@ -61,12 +61,12 @@ func InitializeApp() *fiber.App {
 
 	// Habilitar CORS para cualquier dominio
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "*",
+		AllowOrigins:     "http://localhost:4200, http://load-proyecto-1073641052.us-east-1.elb.amazonaws.com, http://proyecto4-s3.s3-website-us-east-1.amazonaws.com",
 		AllowMethods:     "GET, POST, PUT, DELETE, OPTIONS",
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization, X-Requested-With",
 		ExposeHeaders:    "Content-Length, Content-Type, Authorization",
-		AllowCredentials: false,
-		MaxAge:           86400, // Preflight requests can be cached for 24 hours
+		AllowCredentials: true,
+		MaxAge:           86400,
 	}))
 
 	app.Use(logger.New())

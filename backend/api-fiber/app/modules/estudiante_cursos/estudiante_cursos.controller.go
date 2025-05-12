@@ -105,7 +105,7 @@ func (c *EstudianteCursoController) GetCursosByEstudiante(ctx *fiber.Ctx) error 
 	page := 1
 	limit := 10
 	// Obtener los cursos en los que está inscrito el estudiante
-	cursos, err := c.service.GetCursosDelEstudiante(ctx.Context(), id, page, limit)
+	cursos, err := c.service.GetCursosDelEstudiante(ctx.Context(), id, limit, page)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -132,7 +132,7 @@ func (c *EstudianteCursoController) GetEstudiantesByCurso(ctx *fiber.Ctx) error 
 	page := 1
 	limit := 10
 
-	estudiantes, err := c.service.GetEstudiantesByCurso(ctx.Context(), cursoID, page, limit)
+	estudiantes, err := c.service.GetEstudiantesByCurso(ctx.Context(), cursoID, limit, page)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

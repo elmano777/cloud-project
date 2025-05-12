@@ -7,11 +7,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // Habilitar CORS para cualquier dominio
   app.enableCors({
-    origin: '*',
+    origin: ['http://proyecto4-s3.s3-website-us-east-1.amazonaws.com', 'http://localhost:4200,  http://proyecto4-s3.s3-website-us-east-1.amazonaws.com'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
   });
+  
 
   const config = new DocumentBuilder()
     .setTitle('API de Gestión Académica')

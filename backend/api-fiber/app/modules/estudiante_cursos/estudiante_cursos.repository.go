@@ -27,7 +27,6 @@ func (r *EstudianteCursoRepository) GetCursosByEstudiante(ctx context.Context, e
 	return r.queries.ListInscripcionesByEstudianteWithPagination(ctx, generated.ListInscripcionesByEstudianteWithPaginationParams{
 		EstudianteID: int32(estudianteID),
 		Limit:        int32(limit),
-		Offset:       int32(offset),
 	})
 }
 
@@ -44,7 +43,6 @@ func (r *EstudianteCursoRepository) GetEstudiantesByCurso(ctx context.Context, c
 	return r.queries.ListInscripcionesByCursoWithPagination(ctx, generated.ListInscripcionesByCursoWithPaginationParams{
 		CursoCodigo: int32(cursoCodigo),
 		Limit:       int32(limit),
-		Offset:      int32(offset),
 	})
 }
 

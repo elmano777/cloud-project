@@ -24,8 +24,7 @@ func (s *EstudianteCursoService) Desinscribir(ctx context.Context, req Desinscri
 }
 
 func (s *EstudianteCursoService) GetCursosDelEstudiante(ctx context.Context, estudianteID, limit, page int) ([]EstudianteCurso, error) {
-	offset := (page - 1) * limit
-	generatedCursos, err := s.repo.GetCursosByEstudiante(ctx, estudianteID, limit, offset)
+	generatedCursos, err := s.repo.GetCursosByEstudiante(ctx, estudianteID, limit, page)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +35,8 @@ func (s *EstudianteCursoService) GetCursosDelEstudiante(ctx context.Context, est
 		cursos[i] = EstudianteCurso{
 			CursoCodigo:  int(curso.CursoCodigo),
 			EstudianteID: int(curso.EstudianteID),
-			// Add other fields as needed
+			InscritoEn:   curso.InscritoEn.Time, // Asegúrate que el tipo de generated.EstudianteCurso.InscritoEn sea compatible
+			// con tu EstudianteCurso.InscritoEn. sqlc usualmente usa time.Time o sql.NullTime.
 		}
 	}
 
@@ -44,8 +44,7 @@ func (s *EstudianteCursoService) GetCursosDelEstudiante(ctx context.Context, est
 }
 
 func (s *EstudianteCursoService) GetEstudiantesByCurso(ctx context.Context, cursoCodigo int, limit, page int) ([]EstudianteCurso, error) {
-	offset := (page - 1) * limit
-	generatedEstudiantes, err := s.repo.GetEstudiantesByCurso(ctx, cursoCodigo, limit, offset)
+	generatedEstudiantes, err := s.repo.GetEstudiantesByCurso(ctx, cursoCodigo, limit, page)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +55,7 @@ func (s *EstudianteCursoService) GetEstudiantesByCurso(ctx context.Context, curs
 		estudiantes[i] = EstudianteCurso{
 			CursoCodigo:  int(estudiante.CursoCodigo),
 			EstudianteID: int(estudiante.EstudianteID),
-			// Add other fields as needed
+			InscritoEn:   estudiante.InscritoEn.Time, // Misma consideración que arriba para el tipo.
 		}
 	}
 

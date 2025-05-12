@@ -8,11 +8,12 @@ app = FastAPI()
 # Configurar CORS para permitir solicitudes desde cualquier dominio
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permitir todos los orígenes
+    allow_origins=["http://proyecto4-s3.s3-website-us-east-1.amazonaws.com", "http://localhost:4200,  http://proyecto4-s3.s3-website-us-east-1.amazonaws.com"],
     allow_credentials=True,
-    allow_methods=["*"],  # Permitir todos los métodos
-    allow_headers=["*"],  # Permitir todos los headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 
 USUARIOS_SERVICE_URL = os.getenv("USUARIOS_SERVICE_URL", "http://mi-nestjs-container:3000")
 CURSOS_SERVICE_URL = os.getenv("CURSOS_SERVICE_URL", "http://mi-fiber-container:8070")
@@ -35,9 +36,8 @@ async def obtener_estudiante_cursos(
         estudiante = estudiante_response.json()
 
     # Obtener cursos del estudiante con paginación
-    offset = (page - 1) * limit
     cursos_url = f"{CURSOS_SERVICE_URL}/estudiante-cursos/estudiante/{id_estudiante}"
-    params = {"limit": limit, "offset": offset}
+    params = {"limit": limit, "page": page}
     async with httpx.AsyncClient() as client:
         cursos_response = await client.get(cursos_url, params=params)
         if cursos_response.status_code != 200:
@@ -65,8 +65,7 @@ async def obtener_estudiante_cursos(
         "cursos": detalles_cursos,
         "pagination": {
             "limit": limit,
-            "page": page,
-            "offset": offset
+            "page": page
         }
     }
 
@@ -78,14 +77,22 @@ async def obtener_notas_curso_estudiante(
     limit: int = Query(10, ge=1),
     page: int = Query(1, ge=1)
 ):
-    # Calcular offset para la paginación
-    offset = (page - 1) * limit
+    # Obtener información del estudiante
+    estudiante_url = f"{USUARIOS_SERVICE_URL}/usuarios/{id_estudiante}"
+    async with httpx.AsyncClient() as client:
+        estudiante_response = await client.get(estudiante_url)
+        if estudiante_response.status_code != 200:
+            raise HTTPException(status_code=500, detail="Error al obtener información del estudiante")
+
+        estudiante = estudiante_response.json()
+
+    # Obtener notas del estudiante
     notas_url = f"{NOTAS_SERVICE_URL}/notas"
     params = {
         "id_estudiante": id_estudiante,
         "codigo_curso": codigo_curso,
         "limit": limit,
-        "offset": offset
+        "page": page
     }
     async with httpx.AsyncClient() as client:
         notas_response = await client.get(notas_url, params=params)
@@ -95,10 +102,10 @@ async def obtener_notas_curso_estudiante(
         notas = notas_response.json()
 
     return {
+        "estudiante": estudiante,
         "notas": notas,
         "pagination": {
             "limit": limit,
-            "page": page,
-            "offset": offset
+            "page": page
         }
     }
