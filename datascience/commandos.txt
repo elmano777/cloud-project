@@ -1,0 +1,27 @@
+docker run -d --rm --name mysql_c --network red_bd -e MYSQL_ROOT_PASSWORD=mi_password -p 8005:3306 -v mysql_data:/var/lib/mysql mysql:8
+
+docker run -d --rm --name postgres_c --network red_bd -e POSTGRES_PASSWORD=utec -e POSTGRES_DB=usuario -p 5432:5432 -v psql_data:/var/lib/postgresql/data postgres:15
+docker run -d --rm --name mongo_c --network red_bd -p 27017:27017 -v mongo_data:/data/db mongo:latest
+
+
+
+docker exec -it mysql_c bash
+mysql -h 127.0.0.1 -u root -p
+
+docker exec -it postgres_c psql -U postgres
+docker exec -it mongo_c mongosh 
+
+psycopg2.connect("dbname=postgres user=postgres host=3.87.190.166 password=postgres port=5432")
+
+
+docker run -d --rm --name mysql_c --network red_bd -e MYSQL_ROOT_PASSWORD=mi_password -p 8005:3306 -v mysql_data:/var/lib/mysql mysql:8
+docker run -d --rm --name mysql_c --network red_bd -e MYSQL_ROOT_PASSWORD=mi_password -p 8005:3306 -v mysql_data:/var/lib/mysql mysql:8
+
+
+docker exec -it mysql_c bash
+mysql -u root -p
+
+
+CREATE USER 'root'@'%' IDENTIFIED BY 'mi_password';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;

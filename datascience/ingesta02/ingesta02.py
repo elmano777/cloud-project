@@ -4,11 +4,11 @@ import boto3
 import csv
 
 
-HOST = "172.31.86.125" # IPv4 privada de "MV Bases de Datos"
-PORT = "5342"
+HOST = "" # IPv4 publica
+PORT = "5432"
 USERNAME = "postgres"
-PASSWORD = "postgres"
-DATABASE_NAME = "usuario"  
+PASSWORD = "utec"
+DATABASE_NAME = "postgres"  
 
 
 # Cambiar el nombre del bucket
@@ -24,9 +24,9 @@ for filename, table in UPLOAD_FILES:
     conn = psycopg2.connect(
         host=HOST,
         port=PORT,
+        dbname=DATABASE_NAME,
         user=USERNAME,
         password=PASSWORD,
-        database=DATABASE_NAME
     )  
 
     cursor = conn.cursor()
@@ -37,7 +37,7 @@ for filename, table in UPLOAD_FILES:
     with open(filename, mode="w", newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(columnas)
-        writer.writerow(result)
+        writer.writerows(result)
 
     cursor.close()
     conn.commit()

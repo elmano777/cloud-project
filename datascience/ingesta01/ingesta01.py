@@ -3,11 +3,11 @@ import boto3
 import csv
 
 
-HOST = "172.31.86.125" # IPv4 privada de "MV Bases de Datos"
+HOST = "" # IPv4 publica
 PORT = "8005"
 USERNAME = "root"
 PASSWORD = "mi_password"
-DATABASE_NAME = "bd_api_employees"  
+DATABASE_NAME = "cursos"  
 
 
 # Cambiar el nombre del bucket

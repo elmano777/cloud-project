@@ -3,9 +3,9 @@ import boto3
 import csv
 
 
-HOST = "172.31.86.125" # IPv4 privada de "MV Bases de Datos"
+HOST = "" # IPv4 publica
 PORT = "27017"
-DATABASE_NAME = "calificaciones"  
+DATABASE_NAME = "universidad"  
 
 
 # Cambiar el nombre del bucket
@@ -33,7 +33,6 @@ for filename, table in UPLOAD_FILES:
         writer = csv.DictWriter(file, fieldnames=columnas)
         writer.writeheader()
         for doc in data:
-            doc.pop("_id", None)
             writer.writerow(doc)
 
 
